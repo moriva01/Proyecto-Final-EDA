@@ -48,4 +48,68 @@ enum PriorityType
     HIGH // Alta
 };
 
+std::string statusToString(const StatusType &status) {
+    switch (status) {
+        case OPEN:
+            return "OPEN";
+        case IN_DEV:
+            return "IN_DEV";
+        case IN_CODE_REVIEW:
+            return "IN_CODE_REVIEW";
+        case READY_TO_MERGE:
+            return "READY_TO_MERGE";
+        case CLOSED:
+            return "CLOSED";
+        default:
+            return "UNKNOWN";
+    }
+}
+
+std::string roleToString(const RoleType &role) {
+    switch (role) {
+        case ADMIN:
+            return "ADMIN";
+        case DEVELOPER:
+            return "DEVELOPER";
+        case TESTER:
+            return "TESTER";
+        default:
+            return "UNKNOWN";
+    }
+}
+
+std::string reactionToString(const ReactionType &reaction) {
+    switch (reaction) {
+        case LIKE:
+            return "LIKE";
+        case HEART:
+            return "HEART";
+        case LAUGH:
+            return "LAUGH";
+        case WOW:
+            return "WOW";
+        case SAD:
+            return "SAD";
+        case ANGRY:
+            return "ANGRY";
+        case NONE:
+            return "NONE";
+        default:
+            return "UNKNOWN";
+    }
+}
+
+std::string priorityToString(const PriorityType &priority) {
+    switch (priority) {
+        case LOW:
+            return "LOW";
+        case MEDIUM:
+            return "MEDIUM";
+        case HIGH:
+            return "HIGH";
+        default:
+            return "UNKNOWN";
+    }
+}
+
 #endif // ENUMS_H
