@@ -18,12 +18,13 @@ struct Date
 class Task
 {
 private:
+    int id;
     string title;
     string description;
     Date dueDate;
     StatusType status;
     PriorityType priority;
-    User *assignee;
+    std::set<User *> assignees;
     User *reporter;
     vector<User *> watchers;
     stack<Note> notes;
@@ -33,40 +34,45 @@ public:
     /**
      * @brief Constructor vacío de la clase Task
      */
-    Task() : title(""), description(""), dueDate(Date()), status(OPEN), priority(LOW), assignee(nullptr), reporter(nullptr) {
+    Task() : title(""), description(""), dueDate(Date()), status(OPEN), priority(LOW), assignees({}), reporter(nullptr)
+    {
         reactions[LIKE] = 0;
         reactions[LAUGH] = 0;
         reactions[WOW] = 0;
         reactions[SAD] = 0;
         reactions[ANGRY] = 0;
         reactions[NONE] = 0;
+        id = rand() % 1000 + 1;
     }
     /**
      * @brief Constructor de la clase Task
      */
-    Task(string title, string description, User *reporter, Date dueDate) : title(title), description(description), dueDate(dueDate), status(OPEN), priority(LOW), assignee(nullptr), reporter(reporter) {
+    Task(string title, string description, User *reporter, Date dueDate) : title(title), description(description), dueDate(dueDate), status(OPEN), priority(LOW), assignees({}), reporter(reporter)
+    {
         reactions[LIKE] = 0;
         reactions[LAUGH] = 0;
         reactions[WOW] = 0;
         reactions[SAD] = 0;
         reactions[ANGRY] = 0;
         reactions[NONE] = 0;
+        id = rand() % 1000 + 1;
     }
 
     // Getters
+    int getId() const { return id; }
     string getTitle() const { return title; }
     string getDescription() const { return description; }
     Date getDueDate() const { return dueDate; }
     StatusType getStatus() const { return status; }
     PriorityType getPriority() const { return priority; }
-    User *getAssignee() const { return assignee; }
+    std::set<User *> getAssignees() const { return assignees; }
     User *getReporter() const { return reporter; }
     vector<User *> getWatchers() const { return watchers; }
     stack<Note> getNotes() const { return notes; }
     map<ReactionType, int> getReactions() const { return reactions; }
-    set<ReactionType> getReactionsKeys() const
+    std::set<ReactionType> getReactionsKeys() const
     {
-        set<ReactionType> reactionSet;
+        std::set<ReactionType> reactionSet;
         for (auto reaction : reactions)
         {
             reactionSet.insert(reaction.first);
@@ -74,9 +80,9 @@ public:
         return reactionSet;
     }
 
-    set<int> getReactionsValues() const
+    std::set<int> getReactionsValues() const
     {
-        set<int> reactionValues;
+        std::set<int> reactionValues;
         for (auto reaction : reactions)
         {
             reactionValues.insert(reaction.second);
@@ -86,12 +92,15 @@ public:
 
     // Setters
 
+    void setId(int id) { this->id = id; }
     void setTitle(string title) { this->title = title; }
     void setDescription(string description) { this->description = description; }
     void setDueDate(Date dueDate) { this->dueDate = dueDate; }
     void setStatus(StatusType status) { this->status = status; }
     void setPriority(PriorityType priority) { this->priority = priority; }
-    void setAssignee(User *assignee) { this->assignee = assignee; }
+    void setAssignees(std::set<User *> assignees) { this->assignees = assignees; }
+    void addAssignee(User *assignee) { assignees.insert(assignee); }
+    void removeAssignee(User *assignee) { assignees.erase(assignee); }
     void setReporter(User *reporter) { this->reporter = reporter; }
 
     // Métodos
@@ -115,9 +124,9 @@ public:
             return;
         }
 
-        if (watcher == assignee)
+        if (find(assignees.begin(), assignees.end(), watcher) != assignees.end())
         {
-            cout << "El usuario ya es el asignado de la tarea" << endl;
+            cout << "El usuario ya es asignado de la tarea" << endl;
             return;
         }
         cout << "El usuario ya es espectador de la tarea" << endl;
@@ -233,8 +242,12 @@ public:
         os << "Due Date: " << task.getDueDate().day << "/" << task.getDueDate().month << "/" << task.getDueDate().year << endl;
         os << "Status: " << statusToString(task.getStatus()) << endl;
         os << "Priority: " << priorityToString(task.getPriority()) << endl;
-        os << "Assignee: " << task.getAssignee() << endl;
         os << "Reporter: " << task.getReporter() << endl;
+        os << "Assignees: ";
+        for (User *assignee : task.getAssignees())
+        {
+            os << assignee << " ";
+        }
         os << "Watchers: ";
         for (User *watcher : task.getWatchers())
         {
@@ -264,7 +277,7 @@ public:
 
     bool operator==(const Task &task) const
     {
-        return this->title == task.getTitle();
+        return this->id == task.getId();
     }
 };
 

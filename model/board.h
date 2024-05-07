@@ -3,12 +3,12 @@
 
 #include "./task.h"
 
-
 class Board
 {
 private:
     string title;
     vector<Task> tasks;
+    StatusType state;
     map<PriorityType, queue<Task>> taskQueues;
 
 public:
@@ -17,6 +17,8 @@ public:
 
     string getTitle() const { return title; }
     vector<Task> getTasks() const { return tasks; }
+    StatusType getState() const { return state; }
+    string getStateString() const { return statusToString(state); }
     map<PriorityType, queue<Task>> getTaskQueues() const { return taskQueues; }
     set<PriorityType> getPriorities() const
     {
@@ -39,6 +41,7 @@ public:
 
     void setTitle(string title) { this->title = title; }
     void setTasks(vector<Task> tasks) { this->tasks = tasks; }
+    void setState(StatusType state) { this->state = state; }
     void setTaskQueues(map<PriorityType, queue<Task>> taskQueues) { this->taskQueues = taskQueues; }
 
     void addTask(Task task)

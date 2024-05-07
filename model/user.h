@@ -10,7 +10,7 @@ private:
     string username;
     string password;
     RoleType role;
-    set<Project *> *projects;
+    std::set<Project *> *projects;
 
 public:
     User() : id(0), username(""), password(""), role(DEVELOPER), projects(nullptr) {}
@@ -23,12 +23,12 @@ public:
     string getUsername() const { return username; }
     string getPassword() const { return password; }
     RoleType getRole() const { return role; }
-    set<Project *> *getProjects() const { return projects; }
+    std::set<Project *> *getProjects() const { return projects; }
 
     void setUsername(string username) { this->username = username; }
     void setPassword(string password) { this->password = password; }
     void setRole(RoleType role) { this->role = role; }
-    void setProject(set<Project *> *project) { this->projects = project; }
+    void setProject(std::set<Project *> *project) { this->projects = project; }
 
     void addProject(Project *project)
     {
@@ -38,7 +38,13 @@ public:
         }
         if (projects == nullptr)
         {
-            projects = new set<Project *>();
+            projects = new std::set<Project *>();
+        }
+
+        if (projects->find(project) != projects->end())
+        {
+            cout << "Project already exists" << endl;
+            return;
         }
 
         this->projects->insert(project);
