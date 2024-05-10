@@ -66,3 +66,33 @@ void getProjectInfo(Project &project)
     cout << "Project state: " << project.getBoard().getStateString() << endl;
     cout << endl;
 }
+
+void addAssigneeToTask(Task &task, User &user)
+{
+    task.addAssignee(&user);
+    cout << "Assignee added successfully!" << endl;
+}
+
+void chooseUsersForTask(Task &task)
+{
+    int choice;
+    cout << "Choose assignees for the task: " << endl;
+    for (int i = 0; i < users.size(); i++)
+    {
+        cout << i + 1 << ". " << users[i].getUsername() << endl;
+    }
+    cout << "0. Exit" << endl;
+    while (true)
+    {
+        cout << "Enter your choice: ";
+        cin >> choice;
+        if (choice == 0)
+            break;
+        if (choice < 0 || choice > users.size())
+        {
+            cout << "Invalid choice!" << endl;
+            continue;
+        }
+        addAssigneeToTask(task, users[choice - 1]);
+    }
+}

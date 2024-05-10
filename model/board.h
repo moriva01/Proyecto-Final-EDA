@@ -6,15 +6,23 @@
 class Board
 {
 private:
+    int id;
     string title;
     vector<Task> tasks;
     StatusType state;
     map<PriorityType, queue<Task>> taskQueues;
 
 public:
-    Board() : title("") {}
-    Board(string title) : title(title) {}
+    Board() : title(""), state(OPEN)
+    {
+        id = rand() % 1000 + 1;
+    }
+    Board(string title) : title(title), state(OPEN)
+    {
+        id = rand() % 1000 + 1;
+    }
 
+    int getId() const { return id; }
     string getTitle() const { return title; }
     vector<Task> getTasks() const { return tasks; }
     StatusType getState() const { return state; }
@@ -86,6 +94,7 @@ public:
 
     friend ostream &operator<<(ostream &os, const Board &board)
     {
+        os << "ID: " << board.id << endl;
         os << "Title: " << board.title << endl;
         os << "Tasks: " << endl;
         for (auto &task : board.tasks)
@@ -108,12 +117,12 @@ public:
 
     bool operator<(const Board &board) const
     {
-        return title < board.title;
+        return id < board.getId();
     }
 
     bool operator==(const Board &board) const
     {
-        return title == board.title;
+        return id == board.getId();
     }
 };
 
