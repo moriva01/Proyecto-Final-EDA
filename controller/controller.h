@@ -105,6 +105,7 @@ void showStatesForTasks(Project &project) {
     }
     Board board = project.getBoard();
     map<PriorityType, queue<Task>> taskQueues = board.getTaskQueues();
+    taskQueues.empty() ? cout << "No tasks to show" << endl : cout << "Tasks: " << endl;
     for (auto &taskQueue : taskQueues)
     {
         cout << "Priority: " << taskQueue.first << endl;
