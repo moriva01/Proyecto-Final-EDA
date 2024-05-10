@@ -96,3 +96,24 @@ void chooseUsersForTask(Task &task)
         addAssigneeToTask(task, users[choice - 1]);
     }
 }
+
+void showStatesForTasks(Project &project) {
+    if (projects.find(project) == projects.end())
+    {
+        cout << "Project not found!" << endl;
+        return;
+    }
+    Board board = project.getBoard();
+    map<PriorityType, queue<Task>> taskQueues = board.getTaskQueues();
+    for (auto &taskQueue : taskQueues)
+    {
+        cout << "Priority: " << taskQueue.first << endl;
+        queue<Task> tasks = taskQueue.second;
+        while (!tasks.empty())
+        {
+            Task task = tasks.front();
+            cout << "Task: " << task.getTitle() << " State: " << task.getStatus() << endl;
+            tasks.pop();
+        }
+    }
+}
